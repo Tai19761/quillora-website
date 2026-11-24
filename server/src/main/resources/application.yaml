@@ -1,3 +1,49 @@
+server:
+  address: 127.0.0.1
+  port: 8088
+
 spring:
   application:
-    name: server
+    name: quillora-server
+
+  # Tự động đọc file .env ở thư mục gốc Website/ khi chạy local
+  config:
+    import: optional:file:../.env[.properties]
+
+  datasource:
+    url: jdbc:postgresql://127.0.0.1:5433/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: ${RABBITMQ_USER}
+    password: ${RABBITMQ_PASS}
+
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+
+  cache:
+    type: caffeine
+
+app:
+  jwt:
+    secret: ${JWT_SECRET}
+    kid: key-v1
+    access-token-expiration-ms: 900000 # 15 phút
+    refresh-token-expiration-days: 7
